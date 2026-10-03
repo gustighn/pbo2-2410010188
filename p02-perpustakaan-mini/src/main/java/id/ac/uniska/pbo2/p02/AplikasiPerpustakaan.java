@@ -4,6 +4,8 @@
  */
 package id.ac.uniska.pbo2.p02;
 
+import java.util.List;
+
 /**
  *
  * @author gusti
@@ -16,10 +18,33 @@ public class AplikasiPerpustakaan {
         perpus.tambah(new Buku("B002", "Clean Code", 2008, "Robert C. Martin"));
         perpus.tambah(new Majalah("M001", "Majalah Teknologi Kita", 2026, "Agustus"));
 
+        perpus.tambah(new Skripsi(
+                "S001",
+                "Implementasi Sistem Informasi Perpustakaan",
+                2026,
+                "Gusti Muhammad Abdul Ghani",
+                "Teknik Informatika"
+        ));
+
         Anggota siti = new Anggota("2410010123", "Siti Rahmah");
         Anggota budi = new Anggota("2410010456", "Budi Santoso");
 
         tampilkanDaftar(perpus);
+
+        System.out.println();
+
+        List<Koleksi> hasilPencarian = perpus.cariJudul("code");
+
+        System.out.println("Hasil pencarian \"code\": "
+                + hasilPencarian.size() + " koleksi");
+
+        for (Koleksi k : hasilPencarian) {
+            System.out.println(k);
+        }
+
+        System.out.println();
+
+        cetakPinjam(perpus, "S001", siti);
 
         System.out.println();
         cetakPinjam(perpus, "B002", siti);
@@ -39,7 +64,7 @@ public class AplikasiPerpustakaan {
     private static void tampilkanDaftar(Perpustakaan perpus) {
         System.out.println("=== Daftar Koleksi ===");
         for (Koleksi k : perpus.getDaftarKoleksi()) {
-            System.out.println(k); 
+            System.out.println(k);
         }
     }
 
