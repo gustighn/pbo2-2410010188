@@ -34,7 +34,18 @@
 | 5   | Klik isian, lalu ketik `abc`.              | `FocusEvent`: `focusGained`; `KeyEvent`: `keyTyped` untuk karakter yang diketik.                   |
 | 6   | Klik tombol setelah mengetik di isian.     | `FocusEvent`: `focusLost` pada isian dan `ActionEvent`: `actionPerformed` pada tombol yang diklik. |
 
-Catatan: hasil dan urutan event dapat berbeda sesuai tindakan pengguna. Tabel perlu dicocokkan dengan log yang muncul saat aplikasi PengamatEvent dijalankan.
+
+
+## Dokumentasi Screenshot
+
+### Properties Events Tombol Daftar
+![Properties Events Tombol Daftar](p05-event-handling/screenshot/eventsDaftar.png)
+
+### Dialog Ringkasan Data Anggota
+![Dialog Ringkasan Data Anggota](p05-event-handling/screenshot/ringkasan.png)
+
+### Dialog Konfirmasi Keluar
+![Dialog Konfirmasi Keluar](p05-event-handling/screenshot/konfirmasi.png)
 
 ## 3. Jawaban Eksperimen Praktikum 3 - Konversi Suhu
 
