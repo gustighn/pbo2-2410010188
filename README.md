@@ -1,80 +1,75 @@
-# P05 - Event Handling
+# P06 – Validasi Input dan Kegunaan
 
-## Identitas Praktikum
+## Deskripsi Proyek
 
-- Mata Kuliah: Pemrograman Berbasis Objek 2 (PBO 2)
-- Pertemuan: 5
-- Materi: Event Handling
+Proyek ini merupakan pengembangan form pendaftaran anggota perpustakaan dari praktikum sebelumnya. Pada praktikum ini ditambahkan fitur validasi input untuk memastikan data yang dimasukkan pengguna sesuai dengan aturan yang telah ditentukan.
 
-## 1. Peta Event FormAnggotaPerpustakaan
+Form utama yang digunakan adalah `FormAnggotaPerpustakaan`. Validasi dilakukan pada NPM, nama, email, dan nomor HP. Selain itu, terdapat pesan kesalahan, pembatasan karakter, konfirmasi penghapusan data, serta penerapan aksesibilitas pada komponen form.
 
-| No. | Komponen                         | Menu Events | Event              | Aksi                                                                                    |
-| --- | -------------------------------- | ----------- | ------------------ | --------------------------------------------------------------------------------------- |
-| 1   | `setujuCheckBox`                 | Item        | `itemStateChanged` | Tombol Daftar aktif jika kotak persetujuan dicentang dan nonaktif jika centang dihapus. |
-| 2   | `batalButton`                    | Action      | `actionPerformed`  | Mengosongkan semua isian dan mengembalikan fokus ke NPM.                                |
-| 3   | `daftarButton`                   | Action      | `actionPerformed`  | Menampilkan ringkasan data anggota menggunakan `JOptionPane`.                           |
-| 4   | `npmField`                       | Key         | `keyReleased`      | Menampilkan jumlah digit NPM, misalnya 8 dari 10 digit.                                 |
-| 5   | JFrame `FormAnggotaPerpustakaan` | Window      | `windowClosing`    | Meminta konfirmasi sebelum aplikasi ditutup.                                            |
+## Fitur yang Diterapkan
 
-### Pengaturan Form
+1. NPM harus terdiri dari 10 digit angka.
+2. Nama wajib diisi, minimal 3 karakter, dan tidak boleh mengandung angka.
+3. Email harus menggunakan format yang benar.
+4. Nomor HP harus diawali dengan angka 08 dan memiliki panjang sesuai ketentuan.
+5. NPM dan nomor HP hanya menerima input berupa angka.
+6. Input yang tidak valid ditandai dengan garis merah dan pesan kesalahan.
+7. Tombol Daftar menampilkan jumlah kesalahan dan mengarahkan fokus ke kolom pertama yang salah.
+8. Tombol Batal menampilkan konfirmasi sebelum menghapus data.
+9. Penerapan tooltip, mnemonic, dan labelFor untuk membantu penggunaan form.
 
-- `defaultCloseOperation` diatur menjadi `DO_NOTHING`.
-- Tombol Daftar tidak aktif pada kondisi awal.
-- Event dibuat melalui menu Events pada NetBeans GUI Builder.
-- File `.java` dan `.form` disimpan bersama dalam repository.
+## Screenshot
 
-## 2. Tabel Pengamatan Praktikum 2
+### 1. Peer Review
 
-| No. | Tindakan                                   | Event yang Tercatat                                                                                |
-| --- | ------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| 1   | Arahkan kursor ke tombol, lalu jauhkan.    | `MouseEvent`: `mouseEntered`, kemudian `mouseExited`.                                              |
-| 2   | Klik tombol Klik saya.                     | `ActionEvent`: `actionPerformed`.                                                                  |
-| 3   | Centang lalu hapus centang Aktifkan fitur. | `ItemEvent`: `itemStateChanged` saat dicentang dan saat centang dihapus.                           |
-| 4   | Ganti pilihan dari Pagi menjadi Malam.     | `ItemEvent`: pilihan Pagi mengalami `DESELECTED`, lalu Malam mengalami `SELECTED`.                 |
-| 5   | Klik isian, lalu ketik `abc`.              | `FocusEvent`: `focusGained`; `KeyEvent`: `keyTyped` untuk karakter yang diketik.                   |
-| 6   | Klik tombol setelah mengetik di isian.     | `FocusEvent`: `focusLost` pada isian dan `ActionEvent`: `actionPerformed` pada tombol yang diklik. |
+Screenshot hasil penilaian form berdasarkan 10 heuristik Nielsen yang dilakukan bersama teman.
 
+![Peer Review](./p06-validasi-input/foto/peer_review.png)
 
+### 2. Tampilan Input Salah
 
-## Dokumentasi Screenshot
+Screenshot form ketika pengguna memasukkan data yang tidak sesuai dengan aturan validasi. Sistem akan menampilkan garis merah dan pesan kesalahan pada kolom terkait.
 
-### Properties Events Tombol Daftar
-![Properties Events Tombol Daftar](p05-event-handling/screenshot/eventsDaftar.png)
+![Tampilan Input Salah](./p06-validasi-input/foto/tampilan_salah.png)
 
-### Dialog Ringkasan Data Anggota
-![Dialog Ringkasan Data Anggota](p05-event-handling/screenshot/ringkasan.png)
+### 3. Navigator
 
-### Dialog Konfirmasi Keluar
-![Dialog Konfirmasi Keluar](p05-event-handling/screenshot/konfirmasi.png)
+Screenshot jendela Navigator NetBeans yang memperlihatkan susunan komponen pada form, termasuk label pesan kesalahan.
 
-## 3. Jawaban Eksperimen Praktikum 3 - Konversi Suhu
+![Navigator](./p06-validasi-input/foto/navigator.png)
 
-### Eksperimen 1
+## Jawaban Eksperimen Praktikum 4
 
-Jika pemeriksaan `evt.getStateChange() == ItemEvent.SELECTED` dihapus, pesan `item berubah` biasanya tercetak dua kali saat pilihan Combo Box diganti. Hal ini terjadi karena pilihan lama mengalami `DESELECTED` dan pilihan baru mengalami `SELECTED`.
+### 1. Apa yang terjadi ketika huruf diketik pada isian NPM? Baris mana yang menyebabkannya?
 
-### Eksperimen 2
+Huruf tidak akan masuk ke dalam kolom NPM karena kolom tersebut hanya menerima angka. Hal ini dilakukan dengan pemeriksaan `Character.isDigit(evt.getKeyChar())`. Jika karakter bukan angka, `evt.consume()` akan membatalkan input tersebut.
 
-Jika `keyReleased` diganti menjadi `keyPressed`, hasil terlambat satu karakter karena event `keyPressed` berjalan sebelum karakter baru selesai dimasukkan ke dalam isian.
+### 2. Isi email dengan `siti@`, lalu tekan Tab. Kapan pesan kesalahan muncul?
 
-### Eksperimen 3
+Pesan kesalahan muncul ketika kursor meninggalkan kolom email atau saat event `focusLost` dijalankan. Sistem kemudian memeriksa format email dan menampilkan pesan kesalahan karena `siti@` belum memiliki domain yang benar.
 
-Jika blok `try-catch` dihapus lalu huruf dimasukkan, `Double.parseDouble()` menghasilkan `NumberFormatException`. Exception muncul di jendela Output atau console dan proses konversi gagal.
+### 3. Klik isian Nama tanpa mengetik, lalu tekan Tab. Mengapa tidak ada pesan kesalahan?
 
-## 4. Jawaban Eksperimen Praktikum 4 - Kalkulator Sederhana
+Karena validasi ketika kolom kehilangan fokus hanya dilakukan jika kolom sudah berisi teks. Hal ini bertujuan agar pengguna tidak langsung mendapatkan peringatan ketika baru berpindah antar kolom. Namun, ketika tombol Daftar ditekan, seluruh kolom tetap diperiksa sehingga nama yang kosong akan ditandai sebagai kesalahan.
 
-### Eksperimen 1
+### 4. Centang persetujuan, lalu klik Daftar dengan form kosong. Isian mana yang mendapat fokus?
 
-Jika event `actionPerformed` dibuat untuk tombol kali tanpa menghapus lambda di konstruktor, pesan `kali` tercetak dua kali. Penyebabnya adalah dua mekanisme event menjalankan aksi yang sama. Satu tombol sebaiknya hanya menggunakan satu mekanisme event agar tidak terjadi aksi ganda.
+Fokus akan diarahkan ke kolom NPM karena merupakan kolom pertama yang diperiksa dan belum memenuhi aturan validasi. Hal ini membantu pengguna mengetahui bagian pertama yang harus diperbaiki.
 
-### Eksperimen 2
+### 5. Tekan tombol Alt bersama huruf N. Isian mana yang mendapat fokus, dan properti apa yang mengaturnya?
 
-Untuk menambahkan tombol modulus (`%`), tombol ditambahkan pada `operatorPanel` melalui tab Design dan diberi nama variabel, misalnya `modulusButton`. Pada tab Source, tambahkan `case '%' -> a % b;` pada method `hitung()`, lalu hubungkan tombol agar memanggil `hitung('%')`.
+Fokus akan berpindah ke kolom NPM. Hal ini diatur menggunakan properti `displayedMnemonic` pada label NPM dengan huruf N dan properti `labelFor` untuk menghubungkan label dengan kolom NPM.
 
-### Eksperimen 3
+### 6. Isi beberapa isian, lalu klik Batal dan pilih No. Apakah data tetap ada?
 
-Kursor kembali ke isian angka pertama setelah tombol Hapus ditekan karena method `hapus()` memanggil `angka1Field.requestFocusInWindow()`. Perintah tersebut meminta isian angka pertama mendapatkan fokus keyboard.
+Ya, data tetap ada karena pilihan No membatalkan proses pengosongan form. Data hanya akan dihapus apabila pengguna memilih Yes pada jendela konfirmasi.
 
-## 5. Deklarasi Penggunaan AI
+## Pengujian
 
-Saya menggunakan ChatGPT untuk membantu memperbaiki kalimat, membuat format tabel untuk file readme, dan memperbaiki serta menjelaskan kode.
+Pengujian validasi dilakukan menggunakan kelas `UjiValidator`. Pengujian mencakup input kosong, input dengan format yang salah, dan input yang sesuai dengan ketentuan.
+
+Selain itu, form diuji secara langsung untuk memastikan pembatasan karakter, tampilan pesan kesalahan, perpindahan fokus, serta konfirmasi tombol Batal berjalan dengan baik.
+
+## Deklarasi Penggunaan AI
+
+Dalam pengerjaan praktikum ini, saya menggunakan ChatGPT sebagai alat bantu untuk memahami kode dan merapikan kalimat termasuk penulisan format file README.md
