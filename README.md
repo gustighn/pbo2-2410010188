@@ -1,78 +1,100 @@
-# P06 – Validasi Input dan Kegunaan
+# P07 - Katalog Buku Perpustakaan
 
-## Deskripsi Proyek
+## Deskripsi
 
-Proyek ini merupakan pengembangan form pendaftaran anggota perpustakaan dari praktikum sebelumnya. Pada praktikum ini ditambahkan fitur validasi input untuk memastikan data yang dimasukkan pengguna sesuai dengan aturan yang telah ditentukan.
+Aplikasi Katalog Buku Perpustakaan merupakan mini proyek mata kuliah Pemrograman Berbasis Objek 2. Aplikasi ini dibuat menggunakan Java Swing dan FlatLaf dengan NetBeans GUI Builder.
 
-Form utama yang digunakan adalah `FormAnggotaPerpustakaan`. Validasi dilakukan pada NPM, nama, email, dan nomor HP. Selain itu, terdapat pesan kesalahan, pembatasan karakter, konfirmasi penghapusan data, serta penerapan aksesibilitas pada komponen form.
+Aplikasi digunakan untuk mengelola data buku perpustakaan, mulai dari menambahkan, mengubah, menghapus, mencari, hingga melihat status ketersediaan buku.
 
-## Fitur yang Diterapkan
+## Fitur Aplikasi
 
-1. NPM harus terdiri dari 10 digit angka.
-2. Nama wajib diisi, minimal 3 karakter, dan tidak boleh mengandung angka.
-3. Email harus menggunakan format yang benar.
-4. Nomor HP harus diawali dengan angka 08 dan memiliki panjang sesuai ketentuan.
-5. NPM dan nomor HP hanya menerima input berupa angka.
-6. Input yang tidak valid ditandai dengan garis merah dan pesan kesalahan.
-7. Tombol Daftar menampilkan jumlah kesalahan dan mengarahkan fokus ke kolom pertama yang salah.
-8. Tombol Batal menampilkan konfirmasi sebelum menghapus data.
-9. Penerapan tooltip, mnemonic, dan labelFor untuk membantu penggunaan form.
+- Menampilkan daftar buku menggunakan JTable dan AbstractTableModel.
+- Menyediakan minimal 5 data buku contoh.
+- Menambahkan data buku melalui JDialog Form.
+- Mengubah data buku yang sudah tersedia.
+- Menghapus buku dengan konfirmasi.
+- Memvalidasi kode, judul, dan tahun terbit buku.
+- Mencari buku berdasarkan kode, judul, atau penulis.
+- Mengurutkan data melalui kolom tabel.
+- Menampilkan jumlah buku dan jumlah buku yang tersedia.
+- Menyediakan menu dan shortcut keyboard.
+- Menggunakan FlatLaf untuk tampilan aplikasi.
 
-## Screenshot
+## Peta Event
 
-### 1. Peer Review
+| Komponen     | Event                 | Aksi                                              |
+| ------------ | --------------------- | ------------------------------------------------- |
+| tambahButton | actionPerformed       | Memanggil method tambah()                         |
+| ubahButton   | actionPerformed       | Memanggil method ubah()                           |
+| hapusButton  | actionPerformed       | Memanggil method hapus()                          |
+| tambahItem   | actionPerformed       | Memanggil method tambah()                         |
+| ubahItem     | actionPerformed       | Memanggil method ubah()                           |
+| hapusItem    | actionPerformed       | Memanggil method hapus()                          |
+| keluarItem   | actionPerformed       | Menutup aplikasi                                  |
+| tentangItem  | actionPerformed       | Menampilkan informasi aplikasi                    |
+| cariField    | keyReleased           | Menjalankan pencarian buku                        |
+| bukuTable    | mouseClicked          | Klik dua kali untuk mengubah buku                 |
+| bukuTable    | ListSelectionListener | Mengaktifkan tombol Ubah dan Hapus sesuai pilihan |
+| simpanButton | actionPerformed       | Memvalidasi dan menyimpan data buku               |
+| batalButton  | actionPerformed       | Membatalkan pengisian data buku                   |
 
-Screenshot hasil penilaian form berdasarkan 10 heuristik Nielsen yang dilakukan bersama teman.
+### Shortcut Keyboard
 
-![Peer Review](./p06-validasi-input/foto/peer_review.png)
+- Ctrl + N : Tambah buku.
+- Ctrl + E : Ubah buku.
+- Ctrl + D : Hapus buku.
 
-Nama peninjau: Akmal Adi Rizky 
-Nama pemilik form: Gusti Muhammad Abdul Ghani
+## Jawaban Eksperimen Praktikum 5
 
-### 2. Tampilan Input Salah
+### 1. Apa yang terjadi jika fireTableRowsInserted(baris, baris) dijadikan komentar lalu menambahkan kontak baru?
 
-Screenshot form ketika pengguna memasukkan data yang tidak sesuai dengan aturan validasi. Sistem akan menampilkan garis merah dan pesan kesalahan pada kolom terkait.
+Tabel tidak langsung menampilkan kontak yang baru ditambahkan karena JTable tidak mendapatkan pemberitahuan bahwa ada perubahan data pada model. Meskipun data sudah masuk ke dalam model, tampilan tabel tidak otomatis diperbarui. Method fireTableRowsInserted() diperlukan agar JTable mengetahui adanya baris baru.
 
-![Tampilan Input Salah](./p06-validasi-input/foto/tampilan_salah.png)
+### 2. Jika barisTerpilih() hanya mengembalikan getSelectedRow(), siapa nama yang muncul saat memilih Ahmad Fauzi dan menekan Hapus?
 
-### 3. Navigator
+Nama yang muncul adalah Budi Santoso. Hal ini terjadi karena indeks baris pada tabel yang sudah difilter berbeda dengan indeks data sebenarnya di model. Ahmad Fauzi berada pada baris tampilan yang berbeda dengan posisi datanya di model. Karena itu, diperlukan convertRowIndexToModel() agar data yang diproses tetap sesuai dengan baris yang dipilih.
 
-Screenshot jendela Navigator NetBeans yang memperlihatkan susunan komponen pada form, termasuk label pesan kesalahan.
+### 3. Apa yang terjadi jika dialog diubah menjadi modeless dengan mengubah parameter true menjadi false?
 
-![Navigator](./p06-validasi-input/foto/navigator.png)
+Jendela utama tetap bisa digunakan meskipun dialog masih terbuka. Pengguna dapat berpindah dan berinteraksi dengan kedua jendela. Namun, method setVisible(true) tidak lagi menunggu dialog ditutup. Akibatnya, method tampilkan() dapat langsung mengembalikan nilai null sebelum pengguna selesai mengisi dan menyimpan kontak.
 
-## Jawaban Eksperimen Praktikum 4
+### 4. Mengapa Ctrl+E dan Ctrl+D tidak bekerja saat tidak ada baris yang dipilih?
 
-### 1. Apa yang terjadi ketika huruf diketik pada isian NPM? Baris mana yang menyebabkannya?
+Karena menu Ubah dan Hapus dibuat nonaktif ketika tidak ada baris yang dipilih. Status tersebut diatur melalui method perbaruiTombol(). Menu yang nonaktif tidak dapat menjalankan accelerator. Sementara itu, Ctrl+N tetap bekerja karena menu Tambah selalu aktif.
 
-Huruf tidak akan masuk ke dalam kolom NPM karena kolom tersebut hanya menerima angka. Hal ini dilakukan dengan pemeriksaan `Character.isDigit(evt.getKeyChar())`. Jika karakter bukan angka, `evt.consume()` akan membatalkan input tersebut.
+### 5. Jika accelerator hapusItem diubah menjadi tombol Delete tanpa Ctrl, baris apa yang berubah di initComponents()?
 
-### 2. Isi email dengan `siti@`, lalu tekan Tab. Kapan pesan kesalahan muncul?
+Baris pengaturan accelerator pada hapusItem akan berubah. Sebelumnya menggunakan tombol D dengan kombinasi Ctrl, kemudian berubah menjadi tombol Delete tanpa kombinasi Ctrl.
 
-Pesan kesalahan muncul ketika kursor meninggalkan kolom email atau saat event `focusLost` dijalankan. Sistem kemudian memeriksa format email dan menampilkan pesan kesalahan karena `siti@` belum memiliki domain yang benar.
+Contoh kode sebelumnya:
 
-### 3. Klik isian Nama tanpa mengetik, lalu tekan Tab. Mengapa tidak ada pesan kesalahan?
+    hapusItem.setAccelerator(
+        javax.swing.KeyStroke.getKeyStroke(
+            java.awt.event.KeyEvent.VK_D,
+            java.awt.event.InputEvent.CTRL_DOWN_MASK
+        )
+    );
 
-Karena validasi ketika kolom kehilangan fokus hanya dilakukan jika kolom sudah berisi teks. Hal ini bertujuan agar pengguna tidak langsung mendapatkan peringatan ketika baru berpindah antar kolom. Namun, ketika tombol Daftar ditekan, seluruh kolom tetap diperiksa sehingga nama yang kosong akan ditandai sebagai kesalahan.
+Setelah diubah, kode menjadi kurang lebih:
 
-### 4. Centang persetujuan, lalu klik Daftar dengan form kosong. Isian mana yang mendapat fokus?
+    hapusItem.setAccelerator(
+        javax.swing.KeyStroke.getKeyStroke(
+            java.awt.event.KeyEvent.VK_DELETE, 0
+        )
+    );
 
-Fokus akan diarahkan ke kolom NPM karena merupakan kolom pertama yang diperiksa dan belum memenuhi aturan validasi. Hal ini membantu pengguna mengetahui bagian pertama yang harus diperbaiki.
+### 6. Apa yang terjadi jika atribut model baru dibuat setelah initComponents() dipanggil?
 
-### 5. Tekan tombol Alt bersama huruf N. Isian mana yang mendapat fokus, dan properti apa yang mengaturnya?
+Aplikasi akan mengalami error karena nilai model masih null ketika initComponents() dijalankan. Di dalam initComponents(), JTable langsung menggunakan model melalui setModel(model). Akibatnya, muncul error IllegalArgumentException dengan pesan "Cannot set a null TableModel".
 
-Fokus akan berpindah ke kolom NPM. Hal ini diatur menggunakan properti `displayedMnemonic` pada label NPM dengan huruf N dan properti `labelFor` untuk menghubungkan label dengan kolom NPM.
+Oleh karena itu, objek model harus dibuat sebelum initComponents() dipanggil agar JTable mendapatkan model yang valid.
 
-### 6. Isi beberapa isian, lalu klik Batal dan pilih No. Apakah data tetap ada?
+## Video Demo
 
-Ya, data tetap ada karena pilihan No membatalkan proses pengosongan form. Data hanya akan dihapus apabila pengguna memilih Yes pada jendela konfirmasi.
+Video demonstrasi aplikasi Katalog Buku Perpustakaan dapat dilihat melalui tautan berikut:
 
-## Pengujian
-
-Pengujian validasi dilakukan menggunakan kelas `UjiValidator`. Pengujian mencakup input kosong, input dengan format yang salah, dan input yang sesuai dengan ketentuan.
-
-Selain itu, form diuji secara langsung untuk memastikan pembatasan karakter, tampilan pesan kesalahan, perpindahan fokus, serta konfirmasi tombol Batal berjalan dengan baik.
+[Video Demo Katalog Buku Perpustakaan](https://drive.google.com/file/d/1dRn9dMIsVrg8j1-qEJPbFfng7x1B82mM/view?usp=sharing)
 
 ## Deklarasi Penggunaan AI
 
-Dalam pengerjaan praktikum ini, saya menggunakan ChatGPT sebagai alat bantu untuk memahami kode dan merapikan kalimat termasuk penulisan format file README.md
+Dalam pengerjaan praktikum dan mini proyek ini, saya menggunakan ChatGPT sebagai alat bantu untuk memahami materi, membantu mencari solusi ketika terjadi error dan membantu memperbaiki kalimat pada README.
