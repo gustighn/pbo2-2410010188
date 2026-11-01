@@ -26,6 +26,9 @@ Screenshot hasil penilaian form berdasarkan 10 heuristik Nielsen yang dilakukan 
 
 ![Peer Review](./p06-validasi-input/foto/peer_review.png)
 
+Nama peninjau: Akmal Adi Rizky 
+Nama pemilik form: Gusti Muhammad Abdul Ghani
+
 ### 2. Tampilan Input Salah
 
 Screenshot form ketika pengguna memasukkan data yang tidak sesuai dengan aturan validasi. Sistem akan menampilkan garis merah dan pesan kesalahan pada kolom terkait.
