@@ -4,6 +4,8 @@
  */
 package id.ac.uniska.pbo2.uts;
 
+import com.formdev.flatlaf.FlatLightLaf;
+
 /**
  *
  * Nama : Gusti Muhammad Abdul Ghani
@@ -13,11 +15,28 @@ public class DaftarBelanja extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DaftarBelanja.class.getName());
 
+    private final BarangTableModel model =
+        new BarangTableModel();
+    
     /**
      * Creates new form DaftarBelanja
      */
     public DaftarBelanja() {
         initComponents();
+        
+        barangTable.setModel(model);
+
+        getRootPane().setDefaultButton(tambahButton);
+
+        namaField.addActionListener(e -> tambah());
+        hargaField.addActionListener(e -> tambah());
+
+        statusLabel.setText(" ");
+
+        perbaruiRingkasan();
+
+        setSize(900, 600);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -101,9 +120,11 @@ public class DaftarBelanja extends javax.swing.JFrame {
         tombolPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 0));
 
         tambahButton.setText("Tambah");
+        tambahButton.addActionListener(this::tambahButtonActionPerformed);
         tombolPanel.add(tambahButton);
 
         bersihkanButton.setText("Bersihkan");
+        bersihkanButton.addActionListener(this::bersihkanButtonActionPerformed);
         tombolPanel.add(bersihkanButton);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -155,26 +176,141 @@ public class DaftarBelanja extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_kategoriComboActionPerformed
 
+    private void tambahButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambahButtonActionPerformed
+        tambah();
+    }//GEN-LAST:event_tambahButtonActionPerformed
+
+    private void bersihkanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bersihkanButtonActionPerformed
+        bersihkan();
+    }//GEN-LAST:event_bersihkanButtonActionPerformed
+
+    private void tambah() {
+        String nama = namaField.getText().trim();
+
+        if (nama.isEmpty()) {
+            tampilkanError(
+                "Nama barang wajib diisi",
+                namaField
+            );
+            return;
+        }
+
+        if (model.sudahAda(nama)) {
+            tampilkanError(
+                "Barang " + nama + " sudah ada di daftar",
+                namaField
+            );
+            return;
+        }
+
+        String inputHarga = hargaField.getText().trim();
+
+        if (!inputHarga.matches("[0-9]+")) {
+            tampilkanError(
+                "Harga harus angka 1 sampai 10000000",
+                hargaField
+            );
+            return;
+        }
+
+        long harga;
+
+        try {
+            harga = Long.parseLong(inputHarga);
+        } catch (NumberFormatException e) {
+            tampilkanError(
+                "Harga harus angka 1 sampai 10000000",
+                hargaField
+            );
+            return;
+        }
+
+        if (harga < 1 || harga > 10000000) {
+            tampilkanError(
+                "Harga harus angka 1 sampai 10000000",
+                hargaField
+            );
+            return;
+        }
+
+        String namaKategori =
+                kategoriCombo.getSelectedItem().toString();
+
+        Kategori kategori =
+                Kategori.dariLabel(namaKategori);
+
+        int jumlah = (Integer) jumlahSpinner.getValue();
+
+        Barang barang = new Barang(
+            nama,
+            kategori,
+            harga,
+            jumlah
+        );
+
+        model.tambah(barang);
+
+        perbaruiRingkasan();
+
+        bersihkan();
+    }
+    
+    private void tampilkanError(
+            String pesan,
+            javax.swing.JTextField field) {
+
+        statusLabel.setText(pesan);
+        statusLabel.setForeground(java.awt.Color.RED);
+
+        field.requestFocusInWindow();
+        field.selectAll();
+    }
+
+    private void bersihkan() {
+
+        namaField.setText("");
+        hargaField.setText("");
+
+        kategoriCombo.setSelectedIndex(0);
+        jumlahSpinner.setValue(1);
+
+        statusLabel.setText(" ");
+
+        namaField.requestFocusInWindow();
+    }
+    
+    
+    private String formatRupiah(long nilai) {
+
+        java.text.NumberFormat format =
+                java.text.NumberFormat.getInstance(
+                    new java.util.Locale("id", "ID")
+                );
+
+        return "Rp" + format.format(nilai);
+    }
+
+    private void perbaruiRingkasan() {
+
+        totalLabel.setText(
+            "Total " + formatRupiah(model.getTotal())
+        );
+
+        diskonLabel.setText(
+            "Diskon " + formatRupiah(model.getDiskon())
+        );
+
+        bayarLabel.setText(
+            "Bayar " + formatRupiah(model.getBayar())
+        );
+    }
+
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+        FlatLightLaf.setup();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new DaftarBelanja().setVisible(true));

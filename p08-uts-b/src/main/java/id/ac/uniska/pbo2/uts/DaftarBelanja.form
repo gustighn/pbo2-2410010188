@@ -158,11 +158,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Tambah"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tambahButtonActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="bersihkanButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Bersihkan"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bersihkanButtonActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
